@@ -1,10 +1,13 @@
 import { Container, Navbar ,Nav } from 'react-bootstrap';
-import React, { useState } from 'react'
+import React from 'react'
 import './App.css'
-import data from './data.js'
+import Shoes from './Shoes.jsx';
+import { useState } from 'react';
+import {Routes, Link, Route,Outlet} from 'react-router-dom'
+import Detail from './Detail.jsx';
+import data from './data.js';
 
 const App = () => {
-
   let [shoes]=useState(data)
   return (
     <>
@@ -12,32 +15,44 @@ const App = () => {
     <Container>
           <Navbar.Brand href="#home">Navbar</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link as={Link} to="/">메인페이지</Nav.Link>
+            <Nav.Link as={Link} to="/detail">상세페이지</Nav.Link>
           </Nav>
     </Container>
     </Navbar>
-    <div className='main-bg'></div>
-    <div className="container">
-        <div className="row">
-          <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="80%" />
-            <h4>{shoes[0].title}</h4>
-            <p>{shoes[0].price}</p>
+    <Routes>
+      <Route path="/" element={
+        <>
+          <div className='main-bg'></div>
+          <div className="container">
+            <div className="row">
+              <Shoes/>
+            </div>
           </div>
-          <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes2.jpg" width="80%" />
-            <h4>{shoes[1].title}</h4>
-            <p>{shoes[1].price}</p>
-          </div>
-          <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes3.jpg" width="80%" />
-            <h4>{shoes[2].title}</h4>
-            <p>{shoes[2].price}</p>
-          </div>
-        </div>
-      </div>
+        </>
+      }/>
+
+      <Route path="/detail/:id" element={
+        <>
+        <Detail shoes={shoes}/>
+        </>
+      }/>
+  
+
+      <Route path='*' element={<div>404 페이지</div>}/>
+
+      <Route path="/event" element={
+        <>
+        <h1>오늘의 이벤트</h1>
+        <Outlet></Outlet>
+        </>
+      }>
+        <Route path="1" element={<div>1만원 할인쿠폰</div>}/>
+        <Route path="2" element={<div>2만원 할인쿠폰</div>}/>
+      </Route>
+      
+    </Routes>
+
     </>
   )
 }
